@@ -15,7 +15,7 @@ const PopularMenu = () => {
         })
     },[])
     return (
-        <section>
+        <section className="max-w-screen-xl	mx-auto">
             <SectionTitle
             header={'FROM OUR MENU'}
             subHeader={'Popular Items'}
