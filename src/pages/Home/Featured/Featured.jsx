@@ -3,7 +3,7 @@ import featuredImg from "../../../assets/home/featured.jpg";
 import './Featured.css'
 const Featured = () => {
   return (
-    <section className="featuredBG bg-fixed rounded text-white  my-10 py-10">
+    <section className="featuredBG bg-fixed rounded text-white h-[700px] md:h-[800px]  my-10 py-10">
       <SectionTitle
         header={"FROM OUR MENU"}
         subHeader={"Check it out"}
