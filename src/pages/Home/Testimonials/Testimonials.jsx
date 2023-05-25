@@ -1,4 +1,4 @@
-import SectionTitle from "../../../components/SectionTitle";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import { Rating } from '@smastrom/react-rating'
@@ -7,6 +7,7 @@ import '@smastrom/react-rating/style.css'
 import "swiper/css";
 import "swiper/css/navigation";
 import { useEffect, useState } from "react";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);

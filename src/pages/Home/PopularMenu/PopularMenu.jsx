@@ -1,5 +1,5 @@
 
-import SectionTitle from "../../../components/SectionTitle";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import useMenu from "../../../hooks/useMenu";
 import MenuCategory from "../../Menu/MenuCategory/MenuCategory";
 

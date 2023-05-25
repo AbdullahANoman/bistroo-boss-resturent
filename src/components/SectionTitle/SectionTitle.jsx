@@ -8,5 +8,4 @@ const SectionTitle = ({subHeader, header}) => {
         </div>
     );
 };
-
 export default SectionTitle;

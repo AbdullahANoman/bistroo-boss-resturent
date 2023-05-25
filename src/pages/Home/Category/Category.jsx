@@ -10,7 +10,8 @@ import slide2 from "../../../../src/assets/home/slide2.jpg";
 import slide3 from "../../../../src/assets/home/slide3.jpg";
 import slide4 from "../../../../src/assets/home/slide4.jpg";
 import slide5 from "../../../../src/assets/home/slide5.jpg";
-import SectionTitle from "../../../components/SectionTitle";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
+
 
 const Category = () => {
   return (
