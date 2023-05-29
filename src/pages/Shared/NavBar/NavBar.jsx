@@ -22,6 +22,13 @@ const NavBar = () => {
       <li>
       <Link to='/shop/salad'>Our Shop</Link>
       </li>
+      <li>
+      <Link to='/secret'>Secret</Link>
+      </li>
+      <li>
+      <Link to='/secret'><img className="w-10 " style={{borderRadius: '50px 50px 50px 50px'}} src={user?.photoURL} title={user?.displayName} alt="" /></Link>
+      </li>
+
       
       {
         user ? <>
