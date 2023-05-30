@@ -1,47 +1,66 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider/AuthProvider";
+import { FaShoppingCart } from 'react-icons/fa';
+import useCart from "../../../hooks/useCart";
 
 const NavBar = () => {
-  const {user,logOut} = useContext(AuthContext)
-
-  const handleLogOut = () =>{
-    logOut().then(()=>{
-      alert('Logout Successfully')
-    })
-  }
+  const { user, logOut } = useContext(AuthContext);
+  const [carts] = useCart();
+  console.log(carts)
+  const handleLogOut = () => {
+    logOut().then(() => {
+      alert("Logout Successfully");
+    });
+  };
   const navOptions = (
     <>
       <li>
-        <Link to='/'>Home</Link>
-      </li>
-      
-      <li>
-      <Link to='/menu'>Our Menu</Link>
-      </li>
-      <li>
-      <Link to='/shop/salad'>Our Shop</Link>
-      </li>
-      <li>
-      <Link to='/secret'>Secret</Link>
-      </li>
-      <li>
-      <Link to='/secret'><img className="w-10 " style={{borderRadius: '50px 50px 50px 50px'}} src={user?.photoURL} title={user?.displayName} alt="" /></Link>
+        <Link to="/">Home</Link>
       </li>
 
-      
-      {
-        user ? <>
-        <li>
-        <button onClick={handleLogOut}>LogOut</button>
-        </li>
-        </>
-        : <>
-        <li>
-      <Link to='/login'>Login</Link>
+      <li>
+        <Link to="/menu">Our Menu</Link>
       </li>
+      <li>
+        <Link to="/shop/salad">Our Shop</Link>
+      </li>
+      <li>
+        <Link to="/secret">Secret</Link>
+      </li>
+      <li>
+        <Link>
+          <button className="btn gap-2 relative bg-opacity-0 border-none">
+            <FaShoppingCart className="text-2xl"></FaShoppingCart>
+            <div className="badge absolute top-0 right-0 w-0 bg-opacity-0 badge-secondary border-none"> {carts?.length || 0}</div>
+          </button>
+        </Link>
+      </li>
+
+      {user ? (
+        <>
+          <li>
+            <Link to="/secret">
+              <img
+                className="w-10 "
+                style={{ borderRadius: "50px 50px 50px 50px" }}
+                src={user?.photoURL}
+                title={user?.displayName}
+                alt=""
+              />
+            </Link>
+          </li>
+          <li>
+            <button onClick={handleLogOut}>LogOut</button>
+          </li>
         </>
-      }
+      ) : (
+        <>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </>
+      )}
     </>
   );
   return (
@@ -74,9 +93,7 @@ const NavBar = () => {
         <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navOptions}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navOptions}</ul>
       </div>
       <div className="navbar-end">
         <a className="btn">Get started</a>

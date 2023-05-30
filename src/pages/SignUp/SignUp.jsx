@@ -120,7 +120,7 @@ const SignUp = () => {
                     minLength: 6,
                     maxLength: 20,
                     pattern:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{6,}$/,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=).{6,}$/,
                   })}
                   placeholder="password"
                   className="input input-bordered"
