@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import { useContext } from "react";
@@ -6,10 +6,11 @@ import { AuthContext } from "../../Providers/AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
 
 const SignUp = () => {
+  const { createUser, updatePhotoAndName, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const {createUser,updatePhotoAndName,logOut} = useContext(AuthContext);
-  console.log(updatePhotoAndName)
-  const navigate = useNavigate()
+  const from = location?.state?.from?.pathname || "/login";
   const {
     register,
     handleSubmit,
@@ -17,32 +18,45 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    const {email,password,name,photoUrl} = data ;
-    createUser(email,password)
-    .then(result=>{
-      const user = result.user;
-      console.log(user)
-      
-      updatePhotoAndName(name,photoUrl)
-      .then(()=>{
-        Swal.fire({
-          title: 'User Created Successfully . Please Login'  ,
-          showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-          }
-        })
-        navigate('/login')
-        reset();
-        logOut();
-
-      }).catch(error=>console.log(error.message))
-      
-    }).catch(error=>{
-      console.log(error.message)
-    })
+    const { email, password, name, photoUrl } = data;
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log("registered user ", user);
+        updatePhotoAndName(name, photoUrl)
+          .then(() => {
+            const saveUser = { name, email };
+            fetch("http://localhost:5000/users", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(saveUser),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log("user added data", data);
+                if (data.insertedId) {
+                  Swal.fire({
+                    title: "User Created Successfully . Please Login",
+                    showClass: {
+                      popup: "animate__animated animate__fadeInDown",
+                    },
+                    hideClass: {
+                      popup: "animate__animated animate__fadeOutUp",
+                    },
+                  });
+                }
+              });
+            reset();
+            logOut();
+            navigate(from, { replace: true });
+          })
+          .catch((error) => console.log(error.message));
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
   return (
     <>
@@ -72,9 +86,7 @@ const SignUp = () => {
                   className="input input-bordered"
                 />
                 {errors.name && (
-                  <span className="mt-2 text-red-600">
-                    Name is required
-                  </span>
+                  <span className="mt-2 text-red-600">Name is required</span>
                 )}
               </div>
               <div className="form-control">
@@ -119,8 +131,7 @@ const SignUp = () => {
                     required: true,
                     minLength: 6,
                     maxLength: 20,
-                    pattern:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=).{6,}$/,
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=).{6,}$/,
                   })}
                   placeholder="password"
                   className="input input-bordered"
