@@ -11,9 +11,13 @@ import {
 } from "react-icons/fa";
 import {ImSpoonKnife} from 'react-icons/im'
 import { NavLink, Outlet } from "react-router-dom";
+import useAdmin from "../hooks/useAdmin";
+// import useAdmin from "../hooks/useAdmin";
 
 const DashBoard = () => {
-  const isAdmin = true;
+  //TODO admin panel update and this pattern todo dynamic
+  // const isAdmin = true;
+  const [isAdmin] = useAdmin();
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -37,8 +41,8 @@ const DashBoard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/reservation">
-                  <ImSpoonKnife></ImSpoonKnife> Add Items
+                <NavLink to="/dashboard/addItem">
+                  <ImSpoonKnife></ImSpoonKnife> Add An Items
                 </NavLink>
               </li>
               <li>

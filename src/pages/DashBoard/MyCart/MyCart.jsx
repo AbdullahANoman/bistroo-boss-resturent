@@ -3,10 +3,16 @@ import useCart from "../../../hooks/useCart";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
+import useAuth from "../../../hooks/useAuth";
 
 const MyCart = () => {
-  const [carts, refetch] = useCart();
-  const total = carts.reduce((sum, item) => item.price + sum, 0);
+  const {loading} = useAuth();
+  console.log(loading)
+  if(loading){
+    <p>Loading...</p>
+  }
+  const [cart, refetch] = useCart();
+  const total = cart?.reduce((sum, item) => item.price + sum, 0);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -42,7 +48,7 @@ const MyCart = () => {
         subHeader={"my-cart"}
       ></SectionTitle>
       <div className="flex justify-evenly text-2xl w-full font-semibold">
-        <p>Total Orders {carts?.length}</p>
+        <p>Total Orders {cart?.length}</p>
         <p>Total Price {parseInt(total)}</p>
         <button className="btn bg-[#D1A054]  border-none">Pay</button>
       </div>
@@ -59,7 +65,7 @@ const MyCart = () => {
             </tr>
           </thead>
           <tbody>
-            {carts.map((cart, index) => (
+            {cart.map((item, index) => (
               <>
                 <tr>
                   <td>{index + 1}</td>
@@ -68,18 +74,18 @@ const MyCart = () => {
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
                           <img
-                            src={cart?.image}
+                            src={item?.image}
                             alt="Avatar Tailwind CSS Component"
                           />
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td>{cart?.name}</td>
-                  <td className="">{cart?.price}</td>
+                  <td>{item?.name}</td>
+                  <td className="">{item?.price}</td>
                   <th>
                     <button
-                      onClick={() => handleDelete(cart?._id)}
+                      onClick={() => handleDelete(item?._id)}
                       className="btn btn-ghost btn-lg bg-red-600 text-white"
                     >
                       <FaTrashAlt></FaTrashAlt>
