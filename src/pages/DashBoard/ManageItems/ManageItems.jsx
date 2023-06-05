@@ -1,10 +1,45 @@
 import { Helmet } from "react-helmet-async";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import useMenu from "../../../hooks/useMenu";
+import { FaTrashAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+// import { useQuery } from "@tanstack/react-query";
 
 const ManageItems = () => {
-  const [menu] = useMenu();
-  // console.log(menu)
+  const [menu, refetch] = useMenu();
+  const [axiosSecure] = useAxiosSecure();
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/menu/${id}`).then((res) => {
+          refetch();
+          if (res?.data?.deletedCount > 0) {
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          }
+        });
+        // fetch(`http://localhost:5000/menu/${id}`, {
+        //   method: "DELETE",
+        // })
+        //   .then((res) => res.json())
+        //   .then((data) => {
+        //     if (data.deletedCount > 0) {
+        //       refetch();
+        //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        //     }
+        //   });
+      }
+    });
+  };
   return (
     <div className="w-full">
       <Helmet>
@@ -14,7 +49,7 @@ const ManageItems = () => {
         header="manage all items"
         subHeader="Hurry Up"
       ></SectionTitle>
-      <div className="overflow-x-auto px-20 py-20">
+      <div className="overflow-x-auto px-10">
         <table className="table w-full ">
           {/* head */}
           <thead>
@@ -49,7 +84,11 @@ const ManageItems = () => {
                 <td>Zemlak, Daniel and Leannon</td>
                 <td>$ {item?.price}</td>
                 <td>Update</td>
-                <td>Delete</td>
+                <td className="mx-auto">
+                  <button onClick={() => handleDelete(item?._id)}>
+                    <FaTrashAlt className="text-red-400 text-center text-xl"></FaTrashAlt>
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
