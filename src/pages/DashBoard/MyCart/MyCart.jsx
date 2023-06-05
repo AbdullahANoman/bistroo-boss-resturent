@@ -4,6 +4,7 @@ import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const MyCart = () => {
   const {loading} = useAuth();
@@ -50,7 +51,7 @@ const MyCart = () => {
       <div className="flex justify-evenly text-2xl w-full font-semibold">
         <p>Total Orders {cart?.length}</p>
         <p>Total Price {parseInt(total)}</p>
-        <button className="btn bg-[#D1A054]  border-none">Pay</button>
+        <Link to='/dashboard/payment'><button className="btn bg-[#D1A054]  border-none">Pay</button></Link>
       </div>
       <div className="overflow-x-auto w-4/5">
         <table className="table w-full">

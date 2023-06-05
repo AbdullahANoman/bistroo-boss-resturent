@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const AddItem = () => {
   const [axiosSecure] = useAxiosSecure();
-  const notify = () => toast.success('Your Item Was Added');
+  const notify = () => toast.success("Your Item Was Added");
   const {
     register,
     handleSubmit,
@@ -36,14 +36,13 @@ const AddItem = () => {
           image: imgUrl,
         };
         console.log(newItem);
-        axiosSecure.post('/menu', newItem)
-        .then(data=>{
-          const alert = data?.data?.insertedId ;
-          if(alert){
+        axiosSecure.post("/menu", newItem).then((data) => {
+          const alert = data?.data?.insertedId;
+          if (alert) {
             notify();
             reset();
           }
-        })
+        });
         // fetch("http://localhost:5000/menu", {
         //   method: "POST",
         //   headers: {
@@ -75,6 +74,7 @@ const AddItem = () => {
               {...register("name", { required: true })}
             />
           </label>
+
           {errors.name && (
             <span className="text-red-600">This field is required</span>
           )}
@@ -103,7 +103,7 @@ const AddItem = () => {
             <label className="input-group">
               <select
                 {...register("category", { required: true })}
-                className="w-full py-3" 
+                className="w-full py-3"
               >
                 <option disabled>Category</option>
                 <option value="salads">Salads</option>
@@ -158,6 +158,7 @@ const AddItem = () => {
           />
         </div>
       </form>
+      
     </div>
   );
 };
