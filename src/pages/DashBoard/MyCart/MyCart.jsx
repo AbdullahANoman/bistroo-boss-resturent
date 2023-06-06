@@ -50,7 +50,7 @@ const MyCart = () => {
       ></SectionTitle>
       <div className="flex justify-evenly text-2xl w-full font-semibold">
         <p>Total Orders {cart?.length}</p>
-        <p>Total Price {parseInt(total)}</p>
+        <p>Total Price : {parseFloat(total.toFixed(2))}</p>
         <Link to='/dashboard/payment'><button className="btn bg-[#D1A054]  border-none">Pay</button></Link>
       </div>
       <div className="overflow-x-auto w-4/5">
