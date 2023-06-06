@@ -14,6 +14,8 @@ const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [cardError, setCardError] = useState("");
+  const [cardSuccess,setCardSuccess] = useState('')
+  const [processing,setProcessing] = useState(false)
 
   useEffect(() => {
     axiosSecure.post("/create-payment-intent", { price })
@@ -22,6 +24,7 @@ const CheckoutForm = () => {
     });
   }, []);
   const handleSubmit = async (event) => {
+    setProcessing(true)
     event.preventDefault();
 
     if (!stripe || !elements) {
@@ -43,6 +46,7 @@ const CheckoutForm = () => {
     } else {
       setCardError("");
       console.log("payment method", paymentMethod);
+      setProcessing(false)
     }
     const { paymentIntent, error: confirmError } =
       await stripe.confirmCardPayment(clientSecret, {
@@ -57,7 +61,36 @@ const CheckoutForm = () => {
     if (confirmError) {
       console.log(confirmError);
     }
-    console.log(paymentIntent);
+    else{
+      console.log('in payment intent',paymentIntent);
+      
+      
+      if(paymentIntent.status === 'succeeded'){
+        const transactionId = paymentIntent.id;
+        setCardSuccess(transactionId)
+        setProcessing(false)
+        const payment = {
+          email: user?.email,
+          transactionId,
+          price,
+          quantity: cart?.length,
+          menuItems: cart.map(item=> item?.menuItemId),
+          status: 'service-pending',
+          cartItems: cart.map(item=> item?._id),
+          itemsName: cart.map(item=> item?.name)
+        }
+        // fetch('http://localhost:5000/payments',{
+        //   method : 'POST',
+        //   headers : {
+        //     'content-type' : 'application/json'
+        //   },
+        //   body: JSON.stringify(payment)
+        // }).then(res=>res.json()).then(data=>console.log(data))
+        axiosSecure.post('/payments',payment).then(res=>{
+          console.log(res)
+        })
+      }
+    }
   };
 
   return (
@@ -82,7 +115,7 @@ const CheckoutForm = () => {
         <button
           className="btn btn-primary btn-sm mt-4"
           type="submit"
-          disabled={!stripe || !clientSecret}
+          disabled={!stripe || !clientSecret || processing }
         >
           Pay
         </button>
@@ -95,6 +128,9 @@ const CheckoutForm = () => {
         ) : (
           ""
         )}
+        {
+          cardSuccess && cardSuccess ? <p className="text-2xl font-bold text-green-500">{`You successfully completed with transactionId (  ${cardSuccess}  )`}</p> : ''
+        }
       </div>
     </>
   );
